@@ -33,9 +33,9 @@ namespace Vidly.Controllers
         {
             return new List<Customer>()
             {
-                new Customer() {Id = 1, Name = "Gavin"},
-                new Customer() {Id = 2, Name = "Akilah"},
-                new Customer() {Id = 3, Name = "John"}
+                new Customer() {Id = 1, Name = "Drake Morgan"},
+                new Customer() {Id = 2, Name = "Mike Sicario"},
+                new Customer() {Id = 3, Name = "John Smith"}
             };
         }
     }
