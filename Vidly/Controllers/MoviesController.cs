@@ -15,13 +15,13 @@ namespace Vidly.Controllers
         // GET: Movies
         public ActionResult Index()
         {
-            return View(createMovieList());
+            return View(getMovies());
         }
 
         // GET: Movies/Details/1
         public ActionResult Details(int id)
         {
-            var movie = createMovieList().Find(m => m.Id == id);
+            var movie = getMovies().SingleOrDefault(m => m.Id == id);
 
             if (movie == null)
             {
@@ -50,7 +50,7 @@ namespace Vidly.Controllers
             return View(veiwModel);
         }
 
-        private List<Movie> createMovieList()
+        private IEnumerable<Movie> getMovies()
         {
             return new List<Movie>()
             {

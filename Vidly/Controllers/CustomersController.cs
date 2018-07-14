@@ -13,13 +13,13 @@ namespace Vidly.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            return View(createCustomerList());
+            return View(getCustomers());
         }
 
         // GET: Customers/Details/1
         public ActionResult Details(int id)
         {
-            var customer = createCustomerList().Find(cus => cus.Id == id);
+            var customer = getCustomers().SingleOrDefault(cus => cus.Id == id);
 
             if (customer == null)
             {
@@ -29,7 +29,7 @@ namespace Vidly.Controllers
             return View(customer);
         }
 
-        private List<Customer> createCustomerList()
+        private IEnumerable<Customer> getCustomers()
         {
             return new List<Customer>()
             {
