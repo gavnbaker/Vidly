@@ -10,16 +10,29 @@ namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
+        private ApplicationDbContext _context;
+
+        public CustomersController()
+        {
+            _context = new ApplicationDbContext();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
         // GET: Customers
         public ActionResult Index()
         {
-            return View(getCustomers());
+            var customers = _context.Customers.ToList();
+            return View(customers);
         }
 
         // GET: Customers/Details/1
         public ActionResult Details(int id)
         {
-            var customer = getCustomers().SingleOrDefault(cus => cus.Id == id);
+            var customer = _context.Customers.SingleOrDefault(cus => cus.Id == id);
 
             if (customer == null)
             {
@@ -28,15 +41,6 @@ namespace Vidly.Controllers
 
             return View(customer);
         }
-
-        private IEnumerable<Customer> getCustomers()
-        {
-            return new List<Customer>()
-            {
-                new Customer() {Id = 1, Name = "Drake Morgan"},
-                new Customer() {Id = 2, Name = "Mike Sicario"},
-                new Customer() {Id = 3, Name = "John Smith"}
-            };
-        }
+        
     }
 }
