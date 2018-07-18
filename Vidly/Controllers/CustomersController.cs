@@ -6,34 +6,57 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
 using Vidly.Models;
+using Vidly.VeiwModels;
 
 namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
-        private ApplicationDbContext _context;
+        private ApplicationDbContext context;
 
         public CustomersController()
         {
-            _context = new ApplicationDbContext();
+            context = new ApplicationDbContext();
         }
 
         protected override void Dispose(bool disposing)
         {
-            _context.Dispose();
+            context.Dispose();
+        }
+
+        [HttpPost]
+        public ActionResult Create(Customer customer)
+        {
+            context.Customers.Add(customer);
+            context.SaveChanges();
+
+            return RedirectToAction("Index", "Customers");
+        }
+
+
+        public ActionResult New()
+        {
+            var membershipTypes = context.MembershipTypes.ToList();
+
+            var viewModel = new NewCustomerViewModel
+            {
+                MembershipTypes = membershipTypes,
+
+            };
+            return View(viewModel);
         }
 
         // GET: Customers
         public ActionResult Index()
         {
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+            var customers = context.Customers.Include(c => c.MembershipType).ToList();
             return View(customers);
         }
 
         // GET: Customers/Details/1
         public ActionResult Details(int id)
         {
-            var customer = _context.Customers.Include(c => c.MembershipType)
+            var customer = context.Customers.Include(c => c.MembershipType)
                 .SingleOrDefault(cus => cus.Id == id);
 
             if (customer == null)
