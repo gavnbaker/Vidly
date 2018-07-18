@@ -24,10 +24,40 @@ namespace Vidly.Controllers
             context.Dispose();
         }
 
-        [HttpPost]
-        public ActionResult Create(Customer customer)
+        public ActionResult Edit(int Id)
         {
-            context.Customers.Add(customer);
+            var customer = context.Customers.SingleOrDefault(c => c.Id == Id);
+
+            if (customer == null)
+                return HttpNotFound();
+
+            var viewModel = new CustomerFormViewModel
+            {
+                Customer = customer,
+                MembershipTypes = context.MembershipTypes.ToList()
+            };
+
+            return View("CustomerForm", viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Customer customer)
+        {
+            if (customer.Id == 0)
+                context.Customers.Add(customer);
+            else
+            {
+                var customerInDb = context.Customers.Single(c => c.Id == customer.Id);
+
+                customerInDb.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
+                customerInDb.MembershipTypeId = customer.MembershipTypeId;
+                customerInDb.Name = customer.Name;
+                customerInDb.Birthday = customer.Birthday;
+
+                // Alternative way to update our model, warning about storing strings, better to make a DTO with values that will be changed
+                // TryUpdateModel(customerInDb, "", new string[] { "Name", "Birthday", "MembershipTypeId", "IsSubscribedToNewsLetter" });
+            }
+            
             context.SaveChanges();
 
             return RedirectToAction("Index", "Customers");
@@ -38,12 +68,12 @@ namespace Vidly.Controllers
         {
             var membershipTypes = context.MembershipTypes.ToList();
 
-            var viewModel = new NewCustomerViewModel
+            var viewModel = new CustomerFormViewModel
             {
                 MembershipTypes = membershipTypes,
 
             };
-            return View(viewModel);
+            return View("CustomerForm", viewModel);
         }
 
         // GET: Customers
