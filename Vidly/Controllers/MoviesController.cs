@@ -18,6 +18,29 @@ namespace Vidly.Controllers
             this.context = new ApplicationDbContext();
         }
 
+        [HttpPost]
+        public ActionResult Save(Movie movie)
+        {
+            movie.DateAdded = DateTime.Today;
+            context.Movies.Add(movie);
+            context.SaveChanges();
+
+            return RedirectToAction("Index", "Movies");
+        }
+
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            var genres = context.Genres.ToList();
+            var movieViewModel = new MovieFormViewModel
+            {
+                Genres = genres,
+            };
+
+            return View("MovieForm", movieViewModel);
+        }
+
         // GET: Movies
         public ActionResult Index()
         {

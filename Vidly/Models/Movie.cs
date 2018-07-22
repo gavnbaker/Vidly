@@ -15,6 +15,7 @@ namespace Vidly.Models
 
         [Required]
         [Display(Name = "Release Date")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime ReleaseDate { get; set; }
 
         [Display(Name = "Date Added")]
@@ -27,6 +28,7 @@ namespace Vidly.Models
         public Genre Genre { get; set; }
 
         [Required]
+        [Display(Name = "Genre")]
         public byte GenreId { get; set; }
         
     }
