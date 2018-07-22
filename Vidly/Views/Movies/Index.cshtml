@@ -22,7 +22,7 @@ else
         @foreach (var movie in Model)
         {
             <tr>
-                <td><a href="/Movies/Details/@movie.Id">@movie.Name</a></td>
+                <td>@Html.ActionLink(movie.Name, "Edit", new {id = movie.Id})</td>
                 <td>@movie.Genre.Name</td>
             </tr>
         }
